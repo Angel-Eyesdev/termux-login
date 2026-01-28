@@ -1,0 +1,26 @@
+#!/bin/bash
+url=$1
+clear
+echo -e "\e[1;33m— — — — — — — — — — — — — — — — — — — —"
+echo -e "\e[1;32m       PASHA DOWNLOADER MANAGER"
+echo -e "\e[1;33m— — — — — — — — — — — — — — — — — — — —\e[0m"
+echo -e "1) Video (Best Quality)"
+echo -e "2) Video (720p - Saves Data)"
+echo -e "3) Audio Only (MP3)"
+echo -e "\e[1;33m— — — — — — — — — — — — — — — — — — — —\e[0m"
+read -p "Choose an option: " choice
+
+case $choice in
+    1)
+        yt-dlp -f "bestvideo+bestaudio/best" -o "~/storage/downloads/%(title)s.%(ext)s" "$url" ;;
+    2)
+        yt-dlp -f "best[height<=720]" -o "~/storage/downloads/%(title)s.%(ext)s" "$url" ;;
+    3)
+        yt-dlp -x --audio-format mp3 -o "~/storage/downloads/%(title)s.%(ext)s" "$url" ;;
+    *)
+        echo "Invalid option, downloading best quality..."
+        yt-dlp -o "~/storage/downloads/%(title)s.%(ext)s" "$url" ;;
+esac
+
+echo -e "\e[1;32m[+] Task Finished! Check your Gallery/Downloads.\e[0m"
+read -n 1 -s -r -p "Press any key to exit..."
