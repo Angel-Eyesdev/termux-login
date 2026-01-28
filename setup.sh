@@ -1,30 +1,33 @@
 #!/bin/bash
+# 1. Update and Install basics
 pkg update && pkg upgrade -y
-pkg install figlet python ffmpeg translate-shell -y
+pkg install git python ffmpeg translate-shell figlet -y
 pip install yt-dlp
-mkdir -p ~/bin
+
+# 2. Setup Storage
 termux-setup-storage
-cat << "EOF" > ~/.bashrc
-clear
-figlet -f slant "PASHA"
-while true; do
-    echo -ne "\e[1;33m[?] Enter Access Key: \e[0m"
-    read -sp "" pass
-    echo
-    if [ "$pass" = "1234" ]; then
-        echo -e "\e[1;32m[+] Access Granted!\e[0m"
-        break
-    else
-        echo -e "\e[1;31m[!] Wrong Key.\e[0m"
-    fi
-done
-alias get='yt-dlp -o "~/storage/downloads/%(title)s.%(ext)s"'
-alias kurd='trans -t ckb'
-EOF
+
+# 3. Create bin folder and downloader
+mkdir -p ~/bin
 cat << "EOF" > ~/bin/termux-url-opener
 #!/bin/bash
 url=$1
 yt-dlp -o "~/storage/downloads/%(title)s.%(ext)s" "$url"
 EOF
 chmod +x ~/bin/termux-url-opener
-echo -e "\e[1;32m[+] Done!\e[0m"
+
+# 4. Create Login and Aliases
+cat << "EOF" > ~/.bashrc
+clear
+figlet -f slant "PASHA"
+alias get='yt-dlp -o "~/storage/downloads/%(title)s.%(ext)s"'
+alias kurd='trans -t ckb'
+# لێرەدا دەتوانیت کۆدی لۆگینەکەش دابنێیتەوە
+EOF
+
+# 5. بڕگەی گرنگ: ئەگەر فۆڵدەرەکە وون بوو، خۆی دایبەزێنێتەوە
+if [ ! -d "~/termux-login" ]; then
+    git clone https://github.com/Angel-Eyesdev/termux-login ~/termux-login
+fi
+
+echo -e "\e[1;32m[+] هەموو شتێک جێگیر کرا و فۆڵدەرەکەش پارێزراوە!\e[0m"
