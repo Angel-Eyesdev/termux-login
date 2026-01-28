@@ -1,23 +1,30 @@
 #!/bin/bash
-pkg install figlet -y
-cat <<EOT > ~/.bashrc
+pkg update && pkg upgrade -y
+pkg install figlet python ffmpeg translate-shell -y
+pip install yt-dlp
+mkdir -p ~/bin
+termux-setup-storage
+cat << "EOF" > ~/.bashrc
 clear
-echo -e "\e[1;32m"
 figlet -f slant "PASHA"
-echo -e "\e[0m"
-echo -e "\e[1;36m[ Date: \$(date +'%Y-%m-%d') | Time: \$(date +'%H:%M:%S') ]\e[0m"
-echo -e "\e[1;34m---------------------------------------\e[0m"
 while true; do
     echo -ne "\e[1;33m[?] Enter Access Key: \e[0m"
     read -sp "" pass
     echo
-    if [ "\$pass" = "1234" ]; then
-        echo -e "\e[1;32m[+] Access Granted! Welcome back.\e[0m"
-        echo -e "\e[1;34m---------------------------------------\e[0m"
+    if [ "$pass" = "1234" ]; then
+        echo -e "\e[1;32m[+] Access Granted!\e[0m"
         break
     else
-        echo -e "\e[1;31m[!] Access Denied. Try Again.\e[0m"
+        echo -e "\e[1;31m[!] Wrong Key.\e[0m"
     fi
 done
-EOT
-source ~/.bashrc
+alias get='yt-dlp -o "~/storage/downloads/%(title)s.%(ext)s"'
+alias kurd='trans -t ckb'
+EOF
+cat << "EOF" > ~/bin/termux-url-opener
+#!/bin/bash
+url=$1
+yt-dlp -o "~/storage/downloads/%(title)s.%(ext)s" "$url"
+EOF
+chmod +x ~/bin/termux-url-opener
+echo -e "\e[1;32m[+] Done!\e[0m"
