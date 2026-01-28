@@ -21,3 +21,4 @@ while true; do
 done
 EOT
 echo -e "\e[1;32m[+] Setup Complete! Please restart Termux.\e[0m"
+
