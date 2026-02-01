@@ -1,4 +1,21 @@
 #!/bin/bash
+
+VERSION="1.0.0"
+
+# پشکنینی ئەپدیت لە گیتهەبەوە
+RAW_URL="https://raw.githubusercontent.com/Angel-Eyesdev/termux-login/main/setup.sh"
+REMOTE_VERSION=$(curl -s $RAW_URL | grep 'VERSION=' | head -1 | cut -d'"' -f2)
+
+if [[ "$REMOTE_VERSION" != "$VERSION" && ! -z "$REMOTE_VERSION" ]]; then
+    echo -e "\e[1;33m[!] وەشانێکی نوێ بەردەستە: $REMOTE_VERSION\e[0m"
+    echo -e "\e[1;32m[*] خەریکی نوێکردنەوەم...\e[0m"
+    curl -L $RAW_URL -o setup.sh
+    chmod +x setup.sh
+    ./setup.sh
+    exit
+fi
+
+
 # 1. Update and Install basics
 pkg update && pkg upgrade -y
 pkg install git python ffmpeg translate-shell figlet -y
