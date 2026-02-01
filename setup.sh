@@ -16,18 +16,20 @@ yt-dlp -o "~/storage/downloads/%(title)s.%(ext)s" "$url"
 EOF
 chmod +x ~/bin/termux-url-opener
 
-# 4. Create Login and Aliases
+# 4. Create Aliases and Layout
 cat << "EOF" > ~/.bashrc
 clear
 figlet -f slant "PASHA"
 alias get='yt-dlp -o "~/storage/downloads/%(title)s.%(ext)s"'
 alias kurd='trans -t ckb'
-# لێرەدا دەتوانیت کۆدی لۆگینەکەش دابنێیتەوە
+
+# لێرە کۆدی لۆگینەکە زیاد بکە ئەگەر پێت خۆشە
 EOF
 
-# 5. بڕگەی گرنگ: ئەگەر فۆڵدەرەکە وون بوو، خۆی دایبەزێنێتەوە
+# 5. دابەزاندنی فۆڵدەرەکە ئەگەر نەبوو
 if [ ! -d "~/termux-login" ]; then
-    git clone https://github.com/Angel-Eyesdev/termux-login ~/termux-login
+    git clone https://github.com/Angel-Eyesdev/termux-login.git ~/termux-login
 fi
 
-echo -e "\e[1;32m[+] هەموو شتێک جێگیر کرا و فۆڵدەرەکەش پارێزراوە!\e[0m"
+echo -e "\e[1;32m[+] هەموو شتێک جێگیر کرا و فۆڵدەرەکە ئامادەیە!\e[0m"
+
