@@ -1,52 +1,42 @@
 #!/bin/bash
+VERSION="1.1.0"
 
-VERSION="1.0.0"
-
-# پشکنینی ئەپدیت لە گیتهەبەوە
+# 1. سیستەمی ئەپدیت
 RAW_URL="https://raw.githubusercontent.com/Angel-Eyesdev/termux-login/main/setup.sh"
 REMOTE_VERSION=$(curl -s $RAW_URL | grep 'VERSION=' | head -1 | cut -d'"' -f2)
 
 if [[ "$REMOTE_VERSION" != "$VERSION" && ! -z "$REMOTE_VERSION" ]]; then
     echo -e "\e[1;33m[!] وەشانێکی نوێ بەردەستە: $REMOTE_VERSION\e[0m"
-    echo -e "\e[1;32m[*] خەریکی نوێکردنەوەم...\e[0m"
-    curl -L $RAW_URL -o setup.sh
-    chmod +x setup.sh
-    ./setup.sh
+    curl -L $RAW_URL -o setup.sh && chmod +x setup.sh && ./setup.sh
     exit
 fi
 
+# 2. سڕینەوەی NetHunter و زیادەکان
+echo -e "\e[1;34m[*] خەریکی پاککردنەوەی پاشماوەی نێت‌هەنتەرم...\e[0m"
+rm -rf ~/nethunter-fs ~/nethunter-personal install-nethunter-termux 2>/dev/null
+pkg clean && pkg autoremove -y
 
-# 1. Update and Install basics
-pkg update && pkg upgrade -y
-pkg install git python ffmpeg translate-shell figlet -y
-pip install yt-dlp
-
-# 2. Setup Storage
-termux-setup-storage
-
-# 3. Create bin folder and downloader
-mkdir -p ~/bin
-cat << "EOF" > ~/bin/termux-url-opener
-#!/bin/bash
-url=$1
-yt-dlp -o "~/storage/downloads/%(title)s.%(ext)s" "$url"
-EOF
-chmod +x ~/bin/termux-url-opener
-
-# 4. Create Aliases and Layout
+# 3. دروستکردنی لۆگین بۆ ناو .bashrc
 cat << "EOF" > ~/.bashrc
 clear
 figlet -f slant "PASHA"
-alias get='yt-dlp -o "~/storage/downloads/%(title)s.%(ext)s"'
-alias kurd='trans -t ckb'
+echo -e "\e[1;31m--------------------------------------\e[0m"
+# لێرە پاسۆرد دابنێ
+PASS="1234"
+read -sp "[?] پاسۆرد بنووسە: " user_pass
+echo ""
 
-# لێرە کۆدی لۆگینەکە زیاد بکە ئەگەر پێت خۆشە
-EOF
-
-# 5. دابەزاندنی فۆڵدەرەکە ئەگەر نەبوو
-if [ ! -d "~/termux-login" ]; then
-    git clone https://github.com/Angel-Eyesdev/termux-login.git ~/termux-login
+if [ "$user_pass" != "$PASS" ]; then
+    echo -e "\e[1;31m[!] پاسۆرد هەڵەیە! تێرموکس دادەخرێت.\e[0m"
+    exit
 fi
 
-echo -e "\e[1;32m[+] هەموو شتێک جێگیر کرا و فۆڵدەرەکە ئامادەیە!\e[0m"
+clear
+figlet -f slant "WELCOME"
+alias get='yt-dlp -o "~/storage/downloads/%(title)s.%(ext)s"'
+alias kurd='trans -t ckb'
+alias clean='rm -rf ~/.bash_history && clear'
+EOF
+
+echo -e "\e[1;32m[+] سکرێپتەکە ئەپدیت کرا و نێت‌هەنتەر سڕایەوە!\e[0m"
 
