@@ -1,42 +1,55 @@
 #!/bin/bash
-VERSION="1.1.0"
+# 1. Update and Install basics
+pkg update && pkg upgrade -y
+pkg install git python ffmpeg translate-shell figlet -y
+pip install yt-dlp
 
-# 1. سیستەمی ئەپدیت
-RAW_URL="https://raw.githubusercontent.com/Angel-Eyesdev/termux-login/main/setup.sh"
-REMOTE_VERSION=$(curl -s $RAW_URL | grep 'VERSION=' | head -1 | cut -d'"' -f2)
+# 2. Setup Storage
+termux-setup-storage
 
-if [[ "$REMOTE_VERSION" != "$VERSION" && ! -z "$REMOTE_VERSION" ]]; then
-    echo -e "\e[1;33m[!] وەشانێکی نوێ بەردەستە: $REMOTE_VERSION\e[0m"
-    curl -L $RAW_URL -o setup.sh && chmod +x setup.sh && ./setup.sh
-    exit
-fi
+# 3. Create bin folder and downloader
+mkdir -p ~/bin
+cat << "EOF" > ~/bin/termux-url-opener
+#!/bin/bash
+url=$1
+yt-dlp -o "~/storage/downloads/%(title)s.%(ext)s" "$url"
+EOF
+chmod +x ~/bin/termux-url-opener
 
-# 2. سڕینەوەی NetHunter و زیادەکان
-echo -e "\e[1;34m[*] خەریکی پاککردنەوەی پاشماوەی نێت‌هەنتەرم...\e[0m"
-rm -rf ~/nethunter-fs ~/nethunter-personal install-nethunter-termux 2>/dev/null
-pkg clean && pkg autoremove -y
-
-# 3. دروستکردنی لۆگین بۆ ناو .bashrc
+# 4. Create Aliases, Layout and Password System
 cat << "EOF" > ~/.bashrc
 clear
 figlet -f slant "PASHA"
-echo -e "\e[1;31m--------------------------------------\e[0m"
-# لێرە پاسۆرد دابنێ
-PASS="1234"
-read -sp "[?] پاسۆرد بنووسە: " user_pass
-echo ""
+echo -e "\e[1;36m======================================\e[0m"
+echo -e "\e[1;33m       WELCOME TO PASHA TERMINAL      \e[0m"
+echo -e "\e[1;36m======================================\e[0m"
 
-if [ "$user_pass" != "$PASS" ]; then
-    echo -e "\e[1;31m[!] پاسۆرد هەڵەیە! تێرموکس دادەخرێت.\e[0m"
+# --- LOGIN SYSTEM ---
+PASSWORD="karma1234" # لێرە پاسۆردەکەت بگۆڕە
+read -sp "[?] Enter Password to Access: " input_pass
+echo -e "\n"
+
+if [ "$input_pass" != "$PASSWORD" ]; then
+    echo -e "\e[1;31m[!] Access Denied! Wrong Password.\e[0m"
+    sleep 2
     exit
 fi
 
 clear
-figlet -f slant "WELCOME"
+figlet -f slant "PASHA"
+echo -e "\e[1;32m[+] Access Granted. Welcome back!\e[0m"
+
+# Aliases
 alias get='yt-dlp -o "~/storage/downloads/%(title)s.%(ext)s"'
 alias kurd='trans -t ckb'
-alias clean='rm -rf ~/.bash_history && clear'
+alias clean='rm -rf ~/.bash_history && clear && figlet -f slant "PASHA"'
 EOF
 
-echo -e "\e[1;32m[+] سکرێپتەکە ئەپدیت کرا و نێت‌هەنتەر سڕایەوە!\e[0m"
+# 5. Clone repository if it doesn't exist
+if [ ! -d "$HOME/termux-login" ]; then
+    git clone https://github.com/Angel-Eyesdev/termux-login.git "$HOME/termux-login"
+fi
 
+echo -e "\e[1;32m[+] Setup completed successfully!\e[0m"
+echo -e "\e[1;32m[+] Restart Termux to see the changes.\e[0m"
+-
