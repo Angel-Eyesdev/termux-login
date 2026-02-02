@@ -1,23 +1,10 @@
-# 🦁 PASHA TERMUX SETUP
-ئەم سکرێپتە تێرموکسەکەت دەگۆڕێت بۆ ژینگەیەکی پڕۆفیشناڵ و جوان.
+# 🦁 PASHA TERMUX LOGIN
 
-## 🚀 تایبەتمەندییەکان
-* **لۆگۆ:** پیشاندانی ناوی PASHA بە شێوەی ASCII.
-* **داونلۆدەر:** دابەزاندنی ڤیدیۆی یوتیوب بە یەک کلیک.
-* **وەرگێڕان:** وەرگێڕانی دەق بۆ زمانی کوردی (ckb).
-* **ئەپدیت:** سیستەمی ئۆتۆ-ئەپدیت بۆ نوێکردنەوەی کۆدەکان.
+ئەم سکرێپتە بۆ پاراستنی تێرمۆکسەکەتە بە پاسۆرد و ڕێکخستنی لۆگۆیەکی جوان.
 
+## 📥 چۆنیەتی جێگیرکردن (Setup)
+ئەگەر تێرمۆکسەکەت سڕییەوە، تەنها ئەم کۆدە لەناو تێرمۆکس پەیست بکە:
 
-
----
-
-### ٣. ناردنی بۆ گیتهەب
-دوای پاشەکەوتکردنی فایلەکە بە (`Ctrl+O` و `Ctrl+X`)، ئێستا بینێره بۆ سەرەوە:
 ```bash
-git add README.md
-git commit -m "Add a cool README file"
-git push origin main
-## 📥 چۆنیەتی دابەزاندن
-تەنها ئەم کۆدە لە تێرموکسەکەت کۆپی بکە:
-```bash
-pkg install curl -y && curl -L [https://raw.githubusercontent.com/Angel-Eyesdev/termux-login/main/setup.sh](https://raw.githubusercontent.com/Angel-Eyesdev/termux-login/main/setup.sh) | bash
+pkg install git -y && git clone [https://github.com/Angel-Eyesdev/termux-login](https://github.com/Angel-Eyesdev/termux-login) && bash termux-login/setup.sh
+
